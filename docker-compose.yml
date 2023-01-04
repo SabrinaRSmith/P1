@@ -10,6 +10,7 @@ services:
     container_name: planetarium
     ports:
       - 8080:8080
+      - 5432:5432
     environment:
       - VARIABLE=VALUE
     volumes:
@@ -39,3 +40,13 @@ services:
       - 3000:3000
     depends_on:
       - loki # ensures loki is setup before Grafana tries to interface with it
+
+  prometheus:
+    image: prom/prometheus:latest 
+    ports:
+      - 9090:9090
+    volumes:
+      - ./configs/prometheus-config.yml:/etc/prometheus/prometheus-config.yml
+    #  - ./configs/prometheus-rules.yml:/etc/prometheus/prometheus-rules.yml
+    container_name: logging-prometheus
+    command: "--config.file=/etc/prometheus/prometheus-config.yml"
